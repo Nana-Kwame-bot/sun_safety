@@ -3,7 +3,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sun_safety/models/address.dart';
 
-class UserLocation {
+class UserLocationRepository {
   Future<Position> getGeoLocationPosition() async {
     bool serviceEnabled;
     LocationPermission permission;

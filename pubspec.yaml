@@ -34,12 +34,13 @@ dependencies:
   flutter_bloc: ^7.3.3
   flutter_neumorphic: ^3.2.0
   geocoding: ^2.0.1
-  geolocator: ^7.7.1
+  geolocator: ^7.0.1
   http: ^0.13.4
   hydrated_bloc: ^7.1.0
   intl: ^0.17.0
   json_annotation: ^4.3.0
   json_serializable: ^6.0.1
+  path_provider: ^2.0.6
 
 dev_dependencies:
   build_runner: ^2.1.5

@@ -13,29 +13,34 @@ UV _parseJson(String responseBody) {
 /// Exception thrown when uvSearch fails.
 class UVIRequestFailure implements Exception {}
 
-class UVapiClient {
-  UVapiClient({http.Client? httpClient})
+class UVRepository {
+  UVRepository({http.Client? httpClient})
       : _httpClient = httpClient ?? http.Client();
 
-  static const _baseUrl = 'https://api.openuv.io';
+  static const _baseUrl = 'api.openuv.io';
+  static const apiKey = 'd686115e6106e4047df314f497807b7c';
   final http.Client _httpClient;
 
   Future<UV> fetchData({
-    required http.Client client,
     required double latitude,
     required double longitude,
   }) async {
     final _uvRequest = Uri.https(
       _baseUrl,
       '/api/v1/forecast',
-      <String, dynamic>{
-        'lat': latitude,
-        'lng': longitude,
-        'dt': DateTime.now().toIso8601String()
+      <String, String>{
+        'lat': latitude.toString(),
+        'lng': longitude.toString(),
+        'dt': DateTime.now().toIso8601String(),
       },
     );
 
-    final _uvResponse = await _httpClient.get(_uvRequest);
+    final _uvResponse = await _httpClient.get(
+      _uvRequest,
+      headers: {
+        'x-access-token': apiKey,
+      },
+    );
 
     if (_uvResponse.statusCode != 200) {
       debugPrint(_uvResponse.statusCode.toString() + "Failure");

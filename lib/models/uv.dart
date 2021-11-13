@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'package:sun_safety/models/result.dart';
 
 class UV extends Equatable {
@@ -10,6 +11,12 @@ class UV extends Equatable {
 
   UV.fromJson(Map<String, dynamic> json) {
     result = List.from(json['result']).map((e) => Result.fromJson(e)).toList();
+  }
+
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    _data['result'] = result.map((e) => e.toJson()).toList();
+    return _data;
   }
 
   @override

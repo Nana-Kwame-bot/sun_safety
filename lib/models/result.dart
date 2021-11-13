@@ -8,7 +8,7 @@ class Result extends Equatable {
     required this.uv,
     required this.uvTime,
   });
-  late final int? uv;
+  late final num? uv;
   late final DateTime uvTime;
 
   Result.fromJson(Map<String, dynamic> json) {
@@ -16,8 +16,15 @@ class Result extends Equatable {
     uvTime = _parseDateTime(utcTime: json['uv_time']);
   }
 
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    _data['uv'] = uv;
+    _data['uv_time'] = uvTime.toIso8601String();
+    return _data;
+  }
+
   Result copyWith({
-    int? uv,
+    double? uv,
     DateTime? uvTime,
   }) {
     return Result(

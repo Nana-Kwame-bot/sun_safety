@@ -40,4 +40,7 @@ class Address extends Equatable {
       country,
     ];
   }
+
+  @override
+  bool get stringify => true;
 }

@@ -16,12 +16,9 @@ class StatsPage extends StatelessWidget {
         builder: (BuildContext context, BoxConstraints constraints) {
           return SizedBox(
             height: constraints.maxHeight * 0.4,
-            child: BlocConsumer<UvCubit, UVState>(
+            child: BlocBuilder<UvCubit, UVState>(
               buildWhen: (previous, current) {
                 return previous.uvSeries != current.uvSeries;
-              },
-              listener: (context, state) {
-                debugPrint("ayaya + ${state.uvSeries}");
               },
               builder: (context, state) {
                 return SfCartesianChart(
@@ -64,11 +61,9 @@ class StatsPage extends StatelessWidget {
                       xValueMapper: (UVSeries series, int hour) {
                         return series.hour;
                       },
-
                       yValueMapper: (UVSeries series, int hour) {
                         return num.parse(series.uvValue.toStringAsFixed(2));
                       },
-
                       // Enable data label
                       dataLabelSettings: DataLabelSettings(
                         isVisible: true,

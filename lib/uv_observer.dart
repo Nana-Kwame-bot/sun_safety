@@ -9,12 +9,12 @@ class UVObserver implements BlocObserver {
 
   @override
   void onClose(BlocBase bloc) {
-    debugPrint(bloc.toString());
+    // debugPrint(bloc.toString());
   }
 
   @override
   void onCreate(BlocBase bloc) {
-    debugPrint(bloc.toString());
+    // debugPrint(bloc.toString());
   }
 
   @override

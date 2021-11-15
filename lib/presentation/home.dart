@@ -3,6 +3,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sun_safety/presentation/home_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sun_safety/presentation/stats_page.dart';
+import 'package:sun_safety/repository/uv_repository.dart';
 import 'package:sun_safety/uv/cubit/uv_cubit.dart';
 
 /// This is the stateful widget that the main application instantiates.
@@ -16,7 +17,7 @@ class Home extends StatefulWidget {
 /// This is the private State class that goes with Home.
 class _MyStatefulWidgetState extends State<Home> {
   int _selectedIndex = 0;
-  List<Color> _colors = [Colors.black, Colors.grey];
+
   static const List<Widget> _widgetOptions = <Widget>[
     MyHomePage(),
     StatsPage(),
@@ -25,8 +26,6 @@ class _MyStatefulWidgetState extends State<Home> {
   void _onItemTapped(int index, context) {
     setState(() {
       _selectedIndex = index;
-      _colors = List.generate(2, (index) => Colors.grey);
-      _colors[index] = _textColor(context);
     });
   }
 
@@ -39,7 +38,7 @@ class _MyStatefulWidgetState extends State<Home> {
           title: Text(
             "My UV Index",
             style: TextStyle(
-              color: _textColor(context),
+              color: _textColor(context: context),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -62,7 +61,7 @@ class _MyStatefulWidgetState extends State<Home> {
                   NeumorphicTheme.isUsingDark(context)
                       ? Icons.light_mode
                       : Icons.dark_mode,
-                  color: _textColor(context),
+                  color: _textColor(context: context),
                   size: 30.0,
                 ),
               ),
@@ -76,13 +75,16 @@ class _MyStatefulWidgetState extends State<Home> {
             boxShape: NeumorphicBoxShape.circle(),
           ),
           onPressed: () {
-            context.read<UvCubit>().refreshUV();
+            RepositoryProvider.of<UVRepository>(context, listen: false)
+                .getNow();
+            BlocProvider.of<UvCubit>(context, listen: false)
+                .updateUVfromRefresh();
           },
           child: Center(
             child: NeumorphicIcon(
-              Icons.location_on_outlined,
+              Icons.update,
               style: NeumorphicStyle(
-                color: _textColor(context),
+                color: _textColor(context: context),
               ),
               size: 30,
             ),
@@ -116,7 +118,7 @@ class _MyStatefulWidgetState extends State<Home> {
                   IconButton(
                     icon: Icon(
                       Icons.home,
-                      color: _colors[0],
+                      color: _textColorButton(context: context, index: 0),
                     ),
                     onPressed: () {
                       _onItemTapped(0, context);
@@ -127,7 +129,7 @@ class _MyStatefulWidgetState extends State<Home> {
                   IconButton(
                     icon: Icon(
                       Icons.query_stats,
-                      color: _colors[1],
+                      color: _textColorButton(context: context, index: 1),
                     ),
                     onPressed: () {
                       _onItemTapped(1, context);
@@ -152,7 +154,21 @@ class _MyStatefulWidgetState extends State<Home> {
     );
   }
 
-  Color _textColor(BuildContext context) {
+  Color _textColorButton({required BuildContext context, required int index}) {
+    if (NeumorphicTheme.isUsingDark(context)) {
+      if (index == _selectedIndex) {
+        return Colors.white;
+      }
+      return Colors.grey;
+    } else {
+      if (index == _selectedIndex) {
+        return Colors.black;
+      }
+      return Colors.grey;
+    }
+  }
+
+  Color _textColor({required BuildContext context}) {
     if (NeumorphicTheme.isUsingDark(context)) {
       return Colors.white;
     } else {

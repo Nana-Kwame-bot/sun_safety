@@ -19,7 +19,7 @@ class UVApp extends StatelessWidget {
       providers: [
         RepositoryProvider<UVRepository>(
           create: (context) {
-            return UVRepository(httpClient: http.Client());
+            return UVRepository(httpClient: http.Client())..getNow();
           },
         ),
         RepositoryProvider<UserLocationRepository>(

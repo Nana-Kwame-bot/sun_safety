@@ -12,6 +12,7 @@ class UVState extends Equatable {
     this.integers = const [],
     this.currentUV = 0.0,
     this.uvSeries = const [],
+    this.twelveHourDates = const [],
   });
 
   final UV uv;
@@ -22,26 +23,25 @@ class UVState extends Equatable {
   final List<int> integers;
   final double currentUV;
   final List<UVSeries> uvSeries;
-
-  // UVState copyWith({
-  //   UV? uv,
-  //   UVStatus? status,
-  //   Address? address,
-  // }) {
-  //   return UVState(
-  //     address: address ?? this.address,
-  //     uv: uv ?? this.uv,
-  //     status: status ?? this.status,
-  //   );
-  // }
+  final List<String> twelveHourDates;
 
   @override
-  List<Object> get props => [address, status, uv];
+  List<Object> get props {
+    return [
+      uv,
+      status,
+      address,
+      currentUVColor,
+      currentUVText,
+      integers,
+      currentUV,
+      uvSeries,
+      twelveHourDates,
+    ];
+  }
 
   @override
   bool get stringify => true;
-
- 
 
   UVState copyWith({
     UV? uv,
@@ -52,6 +52,7 @@ class UVState extends Equatable {
     List<int>? integers,
     double? currentUV,
     List<UVSeries>? uvSeries,
+    List<String>? twelveHourDates,
   }) {
     return UVState(
       uv: uv ?? this.uv,
@@ -62,6 +63,7 @@ class UVState extends Equatable {
       integers: integers ?? this.integers,
       currentUV: currentUV ?? this.currentUV,
       uvSeries: uvSeries ?? this.uvSeries,
+      twelveHourDates: twelveHourDates ?? this.twelveHourDates,
     );
   }
 }

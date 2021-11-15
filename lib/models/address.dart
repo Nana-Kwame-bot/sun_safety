@@ -7,12 +7,13 @@ class Address extends Equatable {
   final String postalCode;
   final String country;
 
-  const Address(
-      {required this.street,
-      required this.subLocality,
-      required this.locality,
-      required this.postalCode,
-      required this.country});
+  const Address({
+    this.street = "",
+    this.subLocality = "",
+    this.locality = "",
+    this.postalCode = "",
+    this.country = "",
+  });
 
   Address copyWith({
     String? street,

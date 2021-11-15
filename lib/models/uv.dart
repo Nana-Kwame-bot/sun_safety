@@ -5,7 +5,7 @@ import 'package:sun_safety/models/result.dart';
 class UV extends Equatable {
   // ignore: prefer_const_constructors_in_immutables
   UV({
-    required this.result,
+    this.result = const <Result>[],
   });
   late final List<Result> result;
 

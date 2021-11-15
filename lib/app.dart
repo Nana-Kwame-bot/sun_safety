@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sun_safety/presentation/homepage.dart';
+import 'package:sun_safety/presentation/home.dart';
 import 'package:sun_safety/repository/goelocation.dart';
 import 'package:sun_safety/repository/uv_repository.dart';
 import 'package:http/http.dart' as http;
@@ -42,13 +42,15 @@ class UVApp extends StatelessWidget {
             baseColor: Color(0xFFFFFFFF),
             lightSource: LightSource.topLeft,
             depth: 10,
+            accentColor: Colors.grey,
           ),
           darkTheme: NeumorphicThemeData(
             baseColor: Color(0xFF3E3E3E),
             lightSource: LightSource.topLeft,
             depth: 6,
+            accentColor: Colors.grey,
           ),
-          home: MyHomePage(),
+          home: Home(),
         ),
       ),
     );

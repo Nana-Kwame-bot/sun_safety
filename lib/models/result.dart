@@ -36,9 +36,9 @@ class Result extends Equatable {
   DateTime _parseDateTime({required utcTime}) {
     String newString =
         utcTime.substring(0, 10) + ' ' + utcTime.substring(11, 23);
-    debugPrint(newString);
+    // debugPrint(newString);
     DateTime newDateTime = DateTime.parse(newString);
-    debugPrint(DateFormat("EEE, d MMM yyyy HH:mm:ss").format(newDateTime));
+    // debugPrint(DateFormat("EEE, d MMM yyyy HH:mm:ss").format(newDateTime));
     return newDateTime;
   }
 

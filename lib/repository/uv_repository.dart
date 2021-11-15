@@ -11,7 +11,7 @@ UV _parseJson(String responseBody) {
 }
 
 /// Exception thrown when uvSearch fails.
-class UVIRequestFailure implements Exception {}
+// class UVIRequestFailure implements Exception {}
 
 class UVRepository {
   UVRepository({http.Client? httpClient})
@@ -43,8 +43,8 @@ class UVRepository {
     );
 
     if (_uvResponse.statusCode != 200) {
-      debugPrint(_uvResponse.statusCode.toString() + "Failure");
-      throw UVIRequestFailure();
+      debugPrint(_uvResponse.statusCode.toString() + " Failure");
+    
     }
 
     debugPrint(_uvResponse.request.toString());

@@ -4,17 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class UVObserver implements BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
-    debugPrint(change.toString());
+    // debugPrint(change.toString());
   }
 
   @override
   void onClose(BlocBase bloc) {
-    // debugPrint(bloc.toString());
+    debugPrint(bloc.toString());
   }
 
   @override
   void onCreate(BlocBase bloc) {
-    // debugPrint(bloc.toString());
+    debugPrint(bloc.toString());
   }
 
   @override
@@ -24,11 +24,11 @@ class UVObserver implements BlocObserver {
 
   @override
   void onEvent(Bloc bloc, Object? event) {
-    debugPrint(event.toString());
+    // debugPrint(event.toString());
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    debugPrint(transition.toString());
+    // debugPrint(transition.toString());
   }
 }

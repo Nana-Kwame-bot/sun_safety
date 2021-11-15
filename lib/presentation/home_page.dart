@@ -1,3 +1,4 @@
+import 'package:awesome_dropdown/awesome_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -12,7 +13,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // double _ultraViolet = 0.0;
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,34 +55,32 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Neumorphic(
-                            style: NeumorphicStyle(
-                              shape: NeumorphicShape.flat,
-                              lightSource: LightSource.right,
-                              intensity: 0.75,
-                              boxShape: NeumorphicBoxShape.roundRect(
-                                BorderRadius.circular(12),
+                          SizedBox(
+                            height: constraints.maxHeight * 0.1,
+                            child: AwesomeDropDown(
+                              dropDownBorderRadius: 50,
+                              isBackPressedOrTouchedOutSide: true,
+                              elevation: 12.0,
+                              dropDownOverlayBGColor:
+                                  NeumorphicTheme.baseColor(context),
+                              dropDownBGColor:
+                                  NeumorphicTheme.baseColor(context),
+                              selectedItem: "Cloud Coverage",
+                              dropDownList: const [
+                                "Hello",
+                                "Hello",
+                                "Hello",
+                                "Hello",
+                                "Hello",
+                              ],
+                              numOfListItemToShow: 5,
+                              selectedItemTextStyle: TextStyle(
+                                fontSize: 18.0,
+                                color: _textColor(context),
                               ),
-                              depth: 15,
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24.0,
-                              ),
-                              alignment: Alignment.center,
-                              height: constraints.maxHeight * 0.1,
-                              width: constraints.maxWidth * 0.6,
-                              child: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 250),
-                                child: Text(
-                                  state.currentUVText,
-                                  key: ValueKey(state.currentUVText),
-                                  style: TextStyle(
-                                    fontSize: 24.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: _textColor(context),
-                                  ),
-                                ),
+                              dropDownListTextStyle: TextStyle(
+                                fontSize: 16.0,
+                                color: _textColor(context),
                               ),
                             ),
                           ),
@@ -89,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: const EdgeInsets.only(
                               right: 24.0,
                             ),
-                            height: constraints.maxHeight * 0.6,
+                            height: constraints.maxHeight * 0.575,
                             width: constraints.maxWidth * 0.7,
                             child: Neumorphic(
                               style: NeumorphicStyle(
@@ -105,17 +104,35 @@ class _MyHomePageState extends State<MyHomePage> {
                                 color: NeumorphicTheme.baseColor(context),
                               ),
                               child: Center(
-                                child: AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 250),
-                                  child: Text(
-                                    state.currentUV.toStringAsFixed(2),
-                                    key: ValueKey(state.currentUV),
-                                    style: TextStyle(
-                                      fontSize: 60.0,
-                                      color: state.currentUVColor,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    AnimatedSwitcher(
+                                      duration:
+                                          const Duration(milliseconds: 250),
+                                      child: Text(
+                                        state.currentUV.toStringAsFixed(2),
+                                        key: ValueKey(state.currentUV),
+                                        style: TextStyle(
+                                          fontSize: 60.0,
+                                          color: state.currentUVColor,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
+                                    SizedBox(
+                                      height: constraints.maxHeight * 0.025,
+                                    ),
+                                    Text(
+                                      state.currentUVText,
+                                      key: ValueKey(state.currentUVText),
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: _textColor(context),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -128,6 +145,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onTap: () {
+                                    setState(() {
+                                      _selectedIndex = index;
+                                    });
                                     BlocProvider.of<UvCubit>(
                                       context,
                                       listen: false,
@@ -140,6 +160,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                     child: Neumorphic(
                                       style: NeumorphicStyle(
+                                        color: _selectedIndex == index
+                                            ? state.currentUVColor
+                                                .withOpacity(0.5)
+                                            : null,
                                         shape: NeumorphicShape.concave,
                                         lightSource: LightSource.bottom,
                                         border: NeumorphicBorder(

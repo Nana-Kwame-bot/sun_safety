@@ -67,7 +67,10 @@ class UvCubit extends HydratedCubit<UVState> {
         ),
       );
       if (now.hour > 18) {
-        emit(state.copyWith(currentUV: 0.00));
+        emit(state.copyWith(
+          currentUV: 0.00,
+          status: UVStatus.success,
+        ));
         debugPrint("is after 6"); //not sure
       }
     } on Exception catch (e) {
@@ -87,6 +90,7 @@ class UvCubit extends HydratedCubit<UVState> {
         currentUV: _ultraViolet,
         currentUVColor: _ultraColor,
         currentUVText: _ultraText,
+        status: UVStatus.success,
       ),
     );
   }
@@ -106,6 +110,7 @@ class UvCubit extends HydratedCubit<UVState> {
         currentUV: _ultraViolet,
         currentUVColor: _ultraColor,
         currentUVText: _ultraText,
+        status: UVStatus.success,
       ),
     );
   }

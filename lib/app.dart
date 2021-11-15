@@ -37,7 +37,7 @@ class UVApp extends StatelessWidget {
         },
         child: const NeumorphicApp(
           title: 'Sun Safetpy',
-          themeMode: ThemeMode.light,
+          themeMode: ThemeMode.system,
           theme: NeumorphicThemeData(
             baseColor: Color(0xFFFFFFFF),
             lightSource: LightSource.topLeft,

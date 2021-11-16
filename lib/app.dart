@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sun_safety/presentation/home.dart';
+import 'package:sun_safety/repository/elevation_repository.dart';
 import 'package:sun_safety/repository/goelocation.dart';
 import 'package:sun_safety/repository/uv_repository.dart';
 import 'package:http/http.dart' as http;
@@ -17,14 +18,19 @@ class UVApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<UVRepository>(
-          create: (context) {
-            return UVRepository(httpClient: http.Client())..getNow();
-          },
-        ),
         RepositoryProvider<UserLocationRepository>(
           create: (context) {
             return UserLocationRepository();
+          },
+        ),
+        RepositoryProvider<ElevationRepository>(
+          create: (context) {
+            return ElevationRepository(httpClient: http.Client());
+          },
+        ),
+        RepositoryProvider<UVRepository>(
+          create: (context) {
+            return UVRepository(httpClient: http.Client())..getNow();
           },
         ),
       ],
@@ -33,6 +39,7 @@ class UVApp extends StatelessWidget {
           return UvCubit(
             RepositoryProvider.of<UVRepository>(context),
             RepositoryProvider.of<UserLocationRepository>(context),
+            RepositoryProvider.of<ElevationRepository>(context),
           )..fetchUV();
         },
         child: const NeumorphicApp(

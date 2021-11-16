@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../models/uv.dart';
 import 'package:http/http.dart' as http;
 
-// A function that converts a response body into Sunshine :) .
+// A function that converts a response body into Ultraviolet radiation :) .
 UV _parseJson(String responseBody) {
   final parsedJson = jsonDecode(responseBody);
 
@@ -33,16 +33,31 @@ class UVRepository {
   Future<UV> fetchData({
     required double latitude,
     required double longitude,
+    required num? elevation,
   }) async {
-    final _uvRequest = Uri.https(
-      _baseUrl,
-      '/api/v1/forecast',
-      <String, String>{
-        'lat': latitude.toString(),
-        'lng': longitude.toString(),
-        'dt': _now.toIso8601String(),
-      },
-    );
+    dynamic _uvRequest;
+    if (elevation == null) {
+      _uvRequest = Uri.https(
+        _baseUrl,
+        '/api/v1/forecast',
+        <String, String>{
+          'lat': latitude.toString(),
+          'lng': longitude.toString(),
+          'dt': _now.toIso8601String(),
+        },
+      );
+    } else {
+      _uvRequest = Uri.https(
+        _baseUrl,
+        '/api/v1/forecast',
+        <String, String>{
+          'lat': latitude.toString(),
+          'lng': longitude.toString(),
+          'dt': _now.toIso8601String(),
+          'alt': elevation.toString(),
+        },
+      );
+    }
 
     final _uvResponse = await _httpClient.get(
       _uvRequest,

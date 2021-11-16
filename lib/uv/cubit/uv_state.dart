@@ -13,6 +13,8 @@ class UVState extends Equatable {
     this.currentUV = 0.0,
     this.uvSeries = const [],
     this.twelveHourDates = const [],
+    this.timeColor = const [],
+    this.selectedIndex = 0,
   });
 
   final UV uv;
@@ -24,6 +26,8 @@ class UVState extends Equatable {
   final double currentUV;
   final List<UVSeries> uvSeries;
   final List<String> twelveHourDates;
+  final List<Color> timeColor;
+  final int selectedIndex;
 
   @override
   List<Object> get props {
@@ -37,6 +41,8 @@ class UVState extends Equatable {
       currentUV,
       uvSeries,
       twelveHourDates,
+      timeColor,
+      selectedIndex,
     ];
   }
 
@@ -53,6 +59,8 @@ class UVState extends Equatable {
     double? currentUV,
     List<UVSeries>? uvSeries,
     List<String>? twelveHourDates,
+    List<Color>? timeColor,
+    int? selectedIndex,
   }) {
     return UVState(
       uv: uv ?? this.uv,
@@ -64,6 +72,8 @@ class UVState extends Equatable {
       currentUV: currentUV ?? this.currentUV,
       uvSeries: uvSeries ?? this.uvSeries,
       twelveHourDates: twelveHourDates ?? this.twelveHourDates,
+      timeColor: timeColor ?? this.timeColor,
+      selectedIndex: selectedIndex ?? this.selectedIndex,
     );
   }
 }

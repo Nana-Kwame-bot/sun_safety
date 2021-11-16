@@ -5,7 +5,7 @@ class Results extends Equatable {
   Results({
     required this.elevation,
   });
-  late final int elevation;
+  late final num elevation;
 
   Results.fromJson(Map<String, dynamic> json) {
     elevation = json['elevation'];
@@ -21,7 +21,7 @@ class Results extends Equatable {
   List<Object> get props => [elevation];
 
   Results copyWith({
-    int? elevation,
+    num? elevation,
   }) {
     return Results(
       elevation: elevation ?? this.elevation,

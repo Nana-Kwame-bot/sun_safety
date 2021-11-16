@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sun_safety/models/address.dart';
 
 class UserLocationRepository {
-  Future<Position> getGeoLocationPosition() async {
+  Future<Position?> getGeoLocationPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 

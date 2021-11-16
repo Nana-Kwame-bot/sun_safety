@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sun_safety/uv/cubit/uv_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -13,7 +14,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -140,18 +140,24 @@ class _MyHomePageState extends State<MyHomePage> {
                           SizedBox(
                             height: constraints.maxHeight * 0.125,
                             width: constraints.maxWidth,
-                            child: ListView.builder(
+                            child: ScrollablePositionedList.builder(
+                              physics: const BouncingScrollPhysics(),
+                              itemScrollController:
+                                  BlocProvider.of<UvCubit>(context)
+                                      .itemScrollController,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onTap: () {
-                                    setState(() {
-                                      _selectedIndex = index;
-                                    });
+                                    BlocProvider.of<UvCubit>(context,
+                                            listen: false)
+                                        .setIndex(selectedIndex: index);
                                     BlocProvider.of<UvCubit>(
                                       context,
                                       listen: false,
-                                    ).updateUVfromTime(index: index);
+                                    ).updateUVfromTime(
+                                      index: index,
+                                    );
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -160,10 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                     child: Neumorphic(
                                       style: NeumorphicStyle(
-                                        color: _selectedIndex == index
-                                            ? state.currentUVColor
-                                                .withOpacity(0.5)
-                                            : null,
+                                        color: state.timeColor[index],
                                         shape: NeumorphicShape.concave,
                                         lightSource: LightSource.bottom,
                                         border: NeumorphicBorder(
@@ -204,6 +207,14 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
+  // Color? _getTimeColor({required UVState state, required int index}) {
+  //   if (_selectedIndex == index) {
+  //     return state.currentUVColor.withOpacity(0.5);
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   Color _textColor(BuildContext context) {
     if (NeumorphicTheme.isUsingDark(context)) {

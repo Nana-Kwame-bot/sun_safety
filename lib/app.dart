@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sun_safety/address/cubit/address_cubit.dart';
+import 'package:sun_safety/elevation/cubit/elevation_cubit.dart';
 import 'package:sun_safety/presentation/home.dart';
 import 'package:sun_safety/repository/elevation_repository.dart';
 import 'package:sun_safety/repository/goelocation.dart';
@@ -34,14 +36,33 @@ class UVApp extends StatelessWidget {
           },
         ),
       ],
-      child: BlocProvider(
-        create: (context) {
-          return UvCubit(
-            RepositoryProvider.of<UVRepository>(context),
-            RepositoryProvider.of<UserLocationRepository>(context),
-            RepositoryProvider.of<ElevationRepository>(context),
-          )..fetchUV();
-        },
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) {
+              return ElevationCubit(
+                RepositoryProvider.of<ElevationRepository>(context),
+                RepositoryProvider.of<UserLocationRepository>(context),
+              )..fetchElevationData();
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              return AddressCubit(
+                RepositoryProvider.of<UserLocationRepository>(context),
+              )..getAddress();
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              return UvCubit(
+                RepositoryProvider.of<UVRepository>(context),
+                RepositoryProvider.of<UserLocationRepository>(context),
+                BlocProvider.of<ElevationCubit>(context),
+              )..fetchUV();
+            },
+          ),
+        ],
         child: const NeumorphicApp(
           title: 'Sun Safetpy',
           themeMode: ThemeMode.system,

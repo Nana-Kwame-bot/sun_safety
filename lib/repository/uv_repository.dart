@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../models/uv.dart';
+import '../uv/uv.dart';
 import 'package:http/http.dart' as http;
 
 // A function that converts a response body into Ultraviolet radiation :) .

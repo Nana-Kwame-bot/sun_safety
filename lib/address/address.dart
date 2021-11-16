@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Address extends Equatable {
@@ -44,4 +45,28 @@ class Address extends Equatable {
 
   @override
   bool get stringify => true;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'street': street,
+      'subLocality': subLocality,
+      'locality': locality,
+      'postalCode': postalCode,
+      'country': country,
+    };
+  }
+
+  factory Address.fromMap(Map<String, dynamic> map) {
+    return Address(
+      street: map['street'],
+      subLocality: map['subLocality'],
+      locality: map['locality'],
+      postalCode: map['postalCode'],
+      country: map['country'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Address.fromJson(String source) => Address.fromMap(json.decode(source));
 }

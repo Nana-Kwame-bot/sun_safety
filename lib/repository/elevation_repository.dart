@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sun_safety/models/elevation.dart';
+import 'package:sun_safety/elevation/elevation.dart';
 
 Elevation _parseJson(String responseBody) {
   final parsedJson = jsonDecode(responseBody);

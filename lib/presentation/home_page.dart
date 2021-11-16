@@ -2,6 +2,7 @@ import 'package:awesome_dropdown/awesome_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sun_safety/address/cubit/address_cubit.dart';
 import 'package:sun_safety/uv/cubit/uv_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -28,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Container(
                   padding: const EdgeInsets.only(left: 32.0),
                   height: constraints.maxHeight * 0.1,
-                  child: BlocBuilder<UvCubit, UVState>(
+                  child: BlocBuilder<AddressCubit, AddressState>(
                     buildWhen: (previous, current) {
                       return previous.address != current.address;
                     },

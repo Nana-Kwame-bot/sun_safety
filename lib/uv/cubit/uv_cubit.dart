@@ -6,58 +6,56 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:sun_safety/models/address.dart';
-import 'package:sun_safety/models/elevation.dart';
+import 'package:sun_safety/elevation/cubit/elevation_cubit.dart';
+import 'package:sun_safety/address/address.dart';
+import 'package:sun_safety/elevation/elevation.dart';
 import 'package:sun_safety/models/result.dart';
-import 'package:sun_safety/models/uv.dart';
+import 'package:sun_safety/uv/uv.dart';
 import 'package:sun_safety/models/uv_series.dart';
-import 'package:sun_safety/repository/elevation_repository.dart';
 import 'package:sun_safety/repository/goelocation.dart';
 import 'package:sun_safety/repository/uv_repository.dart';
+import 'dart:async';
 part 'uv_state.dart';
 
 class UvCubit extends HydratedCubit<UVState> {
+  final ElevationCubit _elevationCubit;
+  late final StreamSubscription _elevationSubscription;
+
   UvCubit(
-      this._uvRepository, this._locationRepository, this._elevationRepository)
-      : super(
+    this._uvRepository,
+    this._locationRepository,
+    this._elevationCubit,
+  ) : super(
           UVState(
             uv: UV(),
             status: UVStatus.loading,
-            address: const Address(),
           ),
-        );
+        ) {
+    _elevationSubscription =
+        _elevationCubit.stream.listen((ElevationState elevationState) {
+      _elevation = elevationState.elevation;
+    });
+  }
 
   final UVRepository _uvRepository;
+  late Elevation _elevation;
   final UserLocationRepository _locationRepository;
-  final ElevationRepository _elevationRepository;
+
   DateTime get now => _uvRepository.now;
-  ItemScrollController get itemScrollController => ItemScrollController();
+  ItemScrollController itemScrollController = ItemScrollController();
 
   Future<void> fetchUV() async {
     final Position? _position =
         await _locationRepository.getGeoLocationPosition();
 
-    final _address =
-        await _locationRepository.getAddressFromLatLong(_position!);
-
-    final Elevation _elevation = await _elevationRepository.fetchData(
-      latitude: _position.latitude,
-      longitude: _position.longitude,
-    );
-
-    emit(
-      state.copyWith(status: UVStatus.loading, address: _address),
-    );
-
     final UV _uv;
 
-    if (!_isBetweenDates(
+    // 5 <= now.hour && now.hour <= 17
 
-        ///remove ! when done debugging
-        firstDate: state.uv.result.first.uvTime,
-        lastDate: state.uv.result.last.uvTime)) {
+    if ((now.day != state.uv.result.first.uvTime.day) ||
+        state.uv.result.isEmpty) {
       _uv = await _uvRepository.fetchData(
-        latitude: _position.latitude,
+        latitude: _position!.latitude,
         longitude: _position.longitude,
         elevation: _elevation.results.first.elevation,
       );
@@ -83,9 +81,7 @@ class UvCubit extends HydratedCubit<UVState> {
           timeColor: _getTimeColors(results: _uv.result),
         ),
       );
-      if (!_isBetweenDates(
-          firstDate: state.uv.result.first.uvTime,
-          lastDate: state.uv.result.last.uvTime)) {
+      if (!(5 <= now.hour && now.hour <= 17)) {
         emit(state.copyWith(
           currentUV: 0.00,
           status: UVStatus.success,
@@ -98,17 +94,6 @@ class UvCubit extends HydratedCubit<UVState> {
       );
       log.log(e.toString());
     }
-  }
-
-  bool _isBetweenDates(
-      {required DateTime firstDate, required DateTime lastDate}) {
-    debugPrint(
-        "firstDate" + firstDate.toString() + " lastDate" + lastDate.toString());
-    if (firstDate.isBefore(now) && lastDate.isAfter(now)) {
-      debugPrint("is between");
-      return true;
-    }
-    return false;
   }
 
   void updateUVfromTime({required int index}) {
@@ -153,9 +138,7 @@ class UvCubit extends HydratedCubit<UVState> {
 
   void updateUVfromRefresh() {
     double _ultraViolet = _getUV(results: state.uv.result);
-    if (!_isBetweenDates(
-        firstDate: state.uv.result.first.uvTime,
-        lastDate: state.uv.result.last.uvTime)) {
+    if (!(5 <= now.hour && now.hour <= 17)) {
       _ultraViolet = 0.0;
 
       debugPrint("is after 6"); //not sure
@@ -164,18 +147,17 @@ class UvCubit extends HydratedCubit<UVState> {
     String _ultraText = _uvRepository.getUVText(indexLevel: _ultraViolet);
     final _twelveHourIndex =
         state.twelveHourDates.indexOf(DateFormat('j').format(now));
+
+    List<Color> _timeColors =
+        List.generate(state.uv.result.length, (index) => Colors.white);
+
     if (!(_twelveHourIndex == -1)) {
-      // List<Color> _timeColors =
-      //     List.generate(state.uv.result.length, (index) => Colors.white);
-      // _timeColors[_twelveHourIndex] = state.currentUVColor.withOpacity(0.5);
-      // setIndex(selectedIndex: _twelveHourIndex);
+      _timeColors[_twelveHourIndex] = _ultraColor.withOpacity(0.5);
       itemScrollController.scrollTo(
         index: _twelveHourIndex,
         duration: const Duration(milliseconds: 150),
         curve: Curves.easeInCubic,
       );
-      log.log(_twelveHourIndex.toString());
-
       emit(
         state.copyWith(
           currentUV: _ultraViolet,
@@ -183,9 +165,9 @@ class UvCubit extends HydratedCubit<UVState> {
           currentUVText: _ultraText,
           status: UVStatus.success,
           selectedIndex: _twelveHourIndex,
+          timeColor: _timeColors,
         ),
       );
-      log.log(state.selectedIndex.toString() + "Hellooooooooo");
     } else {
       emit(
         state.copyWith(
@@ -193,6 +175,8 @@ class UvCubit extends HydratedCubit<UVState> {
           currentUVColor: _ultraColor,
           currentUVText: _ultraText,
           status: UVStatus.success,
+          selectedIndex: null,
+          timeColor: _timeColors,
         ),
       );
     }
@@ -291,5 +275,11 @@ class UvCubit extends HydratedCubit<UVState> {
       return state.uv.toJson();
     }
     return null;
+  }
+
+  @override
+  Future<void> close() {
+    _elevationSubscription.cancel();
+    return super.close();
   }
 }

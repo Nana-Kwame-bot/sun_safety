@@ -4,7 +4,7 @@ enum UVStatus { loading, success, failure }
 
 class UVState extends Equatable {
   const UVState({
-    this.address = const Address(),
+   
     required this.uv,
     required this.status,
     this.currentUVColor = Colors.white,
@@ -19,7 +19,6 @@ class UVState extends Equatable {
 
   final UV uv;
   final UVStatus status;
-  final Address address;
   final Color currentUVColor;
   final String currentUVText;
   final List<int> integers;
@@ -34,7 +33,7 @@ class UVState extends Equatable {
     return [
       uv,
       status,
-      address,
+    
       currentUVColor,
       currentUVText,
       integers,
@@ -65,7 +64,7 @@ class UVState extends Equatable {
     return UVState(
       uv: uv ?? this.uv,
       status: status ?? this.status,
-      address: address ?? this.address,
+
       currentUVColor: currentUVColor ?? this.currentUVColor,
       currentUVText: currentUVText ?? this.currentUVText,
       integers: integers ?? this.integers,

@@ -5,8 +5,8 @@ import 'package:sun_safety/models/results.dart';
 class Elevation extends Equatable {
   // ignore: prefer_const_constructors_in_immutables
   Elevation({
-    required this.results,
-    required this.status,
+    this.results = const [],
+    this.status = "",
   });
   late final List<Results> results;
   late final String status;

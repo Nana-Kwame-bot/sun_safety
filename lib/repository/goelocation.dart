@@ -1,6 +1,6 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:sun_safety/models/address.dart';
+import 'package:sun_safety/address/address.dart';
 
 class UserLocationRepository {
   Future<Position?> getGeoLocationPosition() async {

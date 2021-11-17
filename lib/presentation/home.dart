@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sun_safety/presentation/home_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sun_safety/presentation/settings_page.dart';
 import 'package:sun_safety/presentation/stats_page.dart';
 import 'package:sun_safety/repository/uv_repository.dart';
 import 'package:sun_safety/uv/cubit/uv_cubit.dart';
@@ -21,6 +22,7 @@ class _MyStatefulWidgetState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     MyHomePage(),
     StatsPage(),
+    SettingsPage(),
   ];
 
   void _onItemTapped(int index, context) {
@@ -29,14 +31,26 @@ class _MyStatefulWidgetState extends State<Home> {
     });
   }
 
+  String getTitle() {
+    switch (_selectedIndex) {
+      case 0:
+        return "My UV index";
+      case 1:
+        return "Statistics";
+      case 2:
+        return "Settings";
+      default:
+        return "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         appBar: NeumorphicAppBar(
           title: Text(
-            "My UV Index",
+            getTitle(),
             style: TextStyle(
               color: _textColor(context: context),
               fontWeight: FontWeight.bold,
@@ -67,28 +81,6 @@ class _MyStatefulWidgetState extends State<Home> {
               ),
             ),
           ],
-        ),
-        floatingActionButton: NeumorphicFloatingActionButton(
-          style: const NeumorphicStyle(
-            depth: -10.0,
-            shape: NeumorphicShape.concave,
-            boxShape: NeumorphicBoxShape.circle(),
-          ),
-          onPressed: () {
-            RepositoryProvider.of<UVRepository>(context, listen: false)
-                .getNow();
-            BlocProvider.of<UvCubit>(context, listen: false)
-                .updateUVfromRefresh();
-          },
-          child: Center(
-            child: NeumorphicIcon(
-              Icons.update,
-              style: NeumorphicStyle(
-                color: _textColor(context: context),
-              ),
-              size: 30,
-            ),
-          ),
         ),
         backgroundColor: NeumorphicTheme.baseColor(context),
         body: Center(
@@ -137,22 +129,46 @@ class _MyStatefulWidgetState extends State<Home> {
                     iconSize: 30.0,
                     // label: 'Home',
                   ),
-                  const SizedBox(
-                    width: 12.0,
-                    height: 12.0,
-                  )
+                  IconButton(
+                    icon: Icon(
+                      Icons.tune,
+                      color: _textColorButton(context: context, index: 2),
+                    ),
+                    onPressed: () {
+                      _onItemTapped(2, context);
+                    },
+                    iconSize: 30.0,
+                    // label: 'Home',
+                  ),
                 ],
               ),
             ),
           ),
-
-          // currentIndex: _selectedIndex,
-          // selectedItemColor: Colors.amber[800],
-          // onTap: _onItemTapped,
         ),
       ),
     );
   }
+
+  // Route _settingsRoute() {
+  //   return PageRouteBuilder(
+  //     pageBuilder: (_, animation, secondaryAnimation) {
+  //       return const SettingsPage();
+  //     },
+  //     transitionsBuilder: (_, animation, secondaryAnimation, child) {
+  //       const begin = Offset(1.0, 0.0);
+  //       const end = Offset.zero;
+  //       const curve = Curves.ease;
+
+  //       var tween =
+  //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+  //       return SlideTransition(
+  //         position: animation.drive(tween),
+  //         child: child,
+  //       );
+  //     },
+  //   );
+  // }
 
   Color _textColorButton({required BuildContext context, required int index}) {
     if (NeumorphicTheme.isUsingDark(context)) {

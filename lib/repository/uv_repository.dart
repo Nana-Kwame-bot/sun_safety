@@ -104,4 +104,52 @@ class UVRepository {
     }
     return const Color(0xFFFFFFFF);
   }
+
+  final List<String> tanningAbilities = [
+    "Very fair skin, white",
+    "Fair skin, white",
+    "Fair skin, cream white",
+    "Olive skin, Mediterranean",
+    "Brown skin, Middle Eastern",
+    "Black skin",
+  ];
+
+  final List<Color> skinColors = [
+    const Color(0xFFF1D1B1),
+    const Color(0xFFE4B590),
+    const Color(0xFFCF9F7D),
+    const Color(0xFFB67851),
+    const Color(0xFFA15E2D),
+    const Color(0xFF513938),
+  ];
+
+  final Map<Color, String> skinMap = {
+    const Color(0xFFF1D1B1): "Very fair skin, white",
+    const Color(0xFFE4B590): "Fair skin, white",
+    const Color(0xFFCF9F7D): "Fair skin, cream white",
+    const Color(0xFFB67851): "Olive skin, Mediterranean",
+    const Color(0xFFA15E2D): "Brown skin, Middle Eastern",
+    const Color(0xFF513938): "Black skin",
+  };
+
+  List<Widget> generateTiles({required Color color}) {
+    final List<Widget> _tiles = [];
+    for (int i = 0; i < tanningAbilities.length; i++) {
+      _tiles.add(
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: skinColors[i],
+            ),
+            title: Text(
+              tanningAbilities[i],
+              style: TextStyle(color: color),
+            ),
+          ),
+        ),
+      );
+    }
+    return _tiles;
+  }
 }

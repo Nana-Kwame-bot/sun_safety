@@ -17,11 +17,18 @@ class ElevationCubit extends HydratedCubit<ElevationState> {
   Future<void> fetchElevationData() async {
     final Position? _position =
         await _locationRepository.getGeoLocationPosition();
+    final Elevation _elevationData;
 
     try {
-      final elevationData = await _elevationRepository.fetchData(
-          latitude: _position!.latitude, longitude: _position.longitude);
-      emit(state.copyWith(elevation: elevationData));
+      // if (state.elevation.results.isEmpty) {
+      //   log("caled");
+      //   _elevationData = await _elevationRepository.fetchData(
+      //       latitude: _position!.latitude, longitude: _position.longitude);
+      // } else {
+      //   _elevationData = state.elevation;
+      // }
+        _elevationData = state.elevation;
+      emit(state.copyWith(elevation: _elevationData));
     } on Exception catch (e) {
       log(e.toString());
     }

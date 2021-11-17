@@ -4,9 +4,7 @@ enum UVStatus { loading, success, failure }
 
 class UVState extends Equatable {
   const UVState({
-   
     required this.uv,
-    required this.status,
     this.currentUVColor = Colors.white,
     this.currentUVText = "",
     this.integers = const [],
@@ -15,10 +13,12 @@ class UVState extends Equatable {
     this.twelveHourDates = const [],
     this.timeColor = const [],
     this.selectedIndex = 0,
+    this.uvStatus = UVStatus.loading,
+    this.timeToBurn = 0.0,
+    this.burnIndex = 0,
   });
 
   final UV uv;
-  final UVStatus status;
   final Color currentUVColor;
   final String currentUVText;
   final List<int> integers;
@@ -27,13 +27,14 @@ class UVState extends Equatable {
   final List<String> twelveHourDates;
   final List<Color> timeColor;
   final int selectedIndex;
+  final UVStatus uvStatus;
+  final double timeToBurn;
+  final int burnIndex;
 
   @override
   List<Object> get props {
     return [
       uv,
-      status,
-    
       currentUVColor,
       currentUVText,
       integers,
@@ -42,6 +43,9 @@ class UVState extends Equatable {
       twelveHourDates,
       timeColor,
       selectedIndex,
+      uvStatus,
+      timeToBurn,
+      burnIndex,
     ];
   }
 
@@ -50,8 +54,6 @@ class UVState extends Equatable {
 
   UVState copyWith({
     UV? uv,
-    UVStatus? status,
-    Address? address,
     Color? currentUVColor,
     String? currentUVText,
     List<int>? integers,
@@ -60,11 +62,12 @@ class UVState extends Equatable {
     List<String>? twelveHourDates,
     List<Color>? timeColor,
     int? selectedIndex,
+    UVStatus? uvStatus,
+    double? timeToBurn,
+    int? burnIndex,
   }) {
     return UVState(
       uv: uv ?? this.uv,
-      status: status ?? this.status,
-
       currentUVColor: currentUVColor ?? this.currentUVColor,
       currentUVText: currentUVText ?? this.currentUVText,
       integers: integers ?? this.integers,
@@ -73,6 +76,9 @@ class UVState extends Equatable {
       twelveHourDates: twelveHourDates ?? this.twelveHourDates,
       timeColor: timeColor ?? this.timeColor,
       selectedIndex: selectedIndex ?? this.selectedIndex,
+      uvStatus: uvStatus ?? this.uvStatus,
+      timeToBurn: timeToBurn ?? this.timeToBurn,
+      burnIndex: burnIndex ?? this.burnIndex,
     );
   }
 }

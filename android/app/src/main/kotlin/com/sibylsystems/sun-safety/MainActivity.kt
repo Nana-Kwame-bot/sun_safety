@@ -1,4 +1,4 @@
-package com.sibylsystems.sun_safety
+package com.sibylsystems.sun-safety
 
 import io.flutter.embedding.android.FlutterActivity
 

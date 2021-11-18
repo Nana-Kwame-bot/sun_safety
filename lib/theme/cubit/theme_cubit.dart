@@ -9,11 +9,7 @@ class ThemeCubit extends HydratedCubit<ThemeState> {
   // ThemeMode? themeMode;
 
   void onAppStarted() {
-    if (state.props.isEmpty) {
-      emit(state.copyWith(themeMode: ThemeMode.system));
-    } else {
-      emit(state);
-    }
+    emit(state);
   }
 
   void changeTheme({required int index}) {

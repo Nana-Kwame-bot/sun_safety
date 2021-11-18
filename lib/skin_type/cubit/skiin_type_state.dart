@@ -1,17 +1,17 @@
 part of 'skiin_type_cubit.dart';
 
-class SkiinTypeState extends Equatable {
-  const SkiinTypeState(this.burnIndex);
+class SkinTypeState extends Equatable {
+  const SkinTypeState(this.burnIndex);
 
   final int burnIndex;
 
   @override
   List<Object> get props => [burnIndex];
 
-  SkiinTypeState copyWith({
+  SkinTypeState copyWith({
     int? burnIndex,
   }) {
-    return SkiinTypeState(
+    return SkinTypeState(
       burnIndex ?? this.burnIndex,
     );
   }

@@ -74,7 +74,9 @@ class StatsPage extends StatelessWidget {
                             height: constraints.maxHeight * 0.0125,
                           ),
                           Text(
-                            context.watch<UvCubit>().getVitaminD(),
+                            context
+                                .watch<SkinTypeCubit>()
+                                .getVitaminD(indexLevel: state.currentUV),
                             style: TextStyle(
                               color: _textColor(context),
                               fontSize: 32.0,
@@ -111,13 +113,13 @@ class StatsPage extends StatelessWidget {
                           shape: NeumorphicShape.concave,
                           depth: -10.0,
                         ),
-                        child: BlocBuilder<SkiinTypeCubit, SkiinTypeState>(
+                        child: BlocBuilder<SkinTypeCubit, SkinTypeState>(
                           builder: (context, state) {
                             return DirectSelectList(
                               onUserTappedListener: () {},
                               onItemSelectedListener: (dynamic item, int index,
                                   BuildContext context) {
-                                BlocProvider.of<SkiinTypeCubit>(context,
+                                BlocProvider.of<SkinTypeCubit>(context,
                                         listen: false)
                                     .setBurnIndex(burnIndex: index);
                               },

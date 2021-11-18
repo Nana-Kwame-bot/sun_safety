@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class Address extends Equatable {
@@ -16,22 +17,6 @@ class Address extends Equatable {
     this.country = "",
   });
 
-  Address copyWith({
-    String? street,
-    String? subLocality,
-    String? locality,
-    String? postalCode,
-    String? country,
-  }) {
-    return Address(
-      street: street ?? this.street,
-      subLocality: subLocality ?? this.subLocality,
-      locality: locality ?? this.locality,
-      postalCode: postalCode ?? this.postalCode,
-      country: country ?? this.country,
-    );
-  }
-
   @override
   List<Object> get props {
     return [
@@ -42,9 +27,6 @@ class Address extends Equatable {
       country,
     ];
   }
-
-  @override
-  bool get stringify => true;
 
   Map<String, dynamic> toMap() {
     return {
@@ -68,5 +50,25 @@ class Address extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory Address.fromJson(String source) => Address.fromMap(json.decode(source));
+  factory Address.fromJson(String source) =>
+      Address.fromMap(json.decode(source));
+
+  Address copyWith({
+    String? street,
+    String? subLocality,
+    String? locality,
+    String? postalCode,
+    String? country,
+  }) {
+    return Address(
+      street: street ?? this.street,
+      subLocality: subLocality ?? this.subLocality,
+      locality: locality ?? this.locality,
+      postalCode: postalCode ?? this.postalCode,
+      country: country ?? this.country,
+    );
+  }
+
+  @override
+  bool get stringify => true;
 }

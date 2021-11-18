@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sun_safety/address/cubit/address_cubit.dart';
 import 'package:sun_safety/cloud_coverage/cubit/cloud_coverage_cubit.dart';
-import 'package:sun_safety/elevation/cubit/elevation_cubit.dart';
 import 'package:sun_safety/presentation/home.dart';
-import 'package:sun_safety/repository/elevation_repository.dart';
 import 'package:sun_safety/repository/goelocation.dart';
 import 'package:sun_safety/repository/uv_repository.dart';
 import 'package:http/http.dart' as http;
@@ -25,12 +22,7 @@ class UVApp extends StatelessWidget {
       providers: [
         RepositoryProvider<UserLocationRepository>(
           create: (context) {
-            return UserLocationRepository();
-          },
-        ),
-        RepositoryProvider<ElevationRepository>(
-          create: (context) {
-            return ElevationRepository(httpClient: http.Client());
+            return UserLocationRepository()..getGeoLocationPosition();
           },
         ),
         RepositoryProvider<UVRepository>(
@@ -53,32 +45,15 @@ class UVApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) {
-              return SkiinTypeCubit();
-            },
-          ),
-          BlocProvider(
-            create: (context) {
-              return ElevationCubit(
-                RepositoryProvider.of<ElevationRepository>(context),
-                RepositoryProvider.of<UserLocationRepository>(context),
-              )..fetchElevationData();
-            },
-          ),
-          BlocProvider(
-            create: (context) {
-              return AddressCubit(
-                RepositoryProvider.of<UserLocationRepository>(context),
-              )..getAddress();
+              return SkinTypeCubit();
             },
           ),
           BlocProvider(
             create: (context) {
               return UvCubit(
                 RepositoryProvider.of<UVRepository>(context),
-                RepositoryProvider.of<UserLocationRepository>(context),
-                BlocProvider.of<ElevationCubit>(context),
                 BlocProvider.of<CloudCoverageCubit>(context),
-                BlocProvider.of<SkiinTypeCubit>(context),
+                RepositoryProvider.of<UserLocationRepository>(context),
               )..fetchUV();
             },
           ),

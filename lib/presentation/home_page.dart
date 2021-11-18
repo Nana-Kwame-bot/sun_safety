@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sun_safety/address/cubit/address_cubit.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sun_safety/cloud_coverage/cubit/cloud_coverage_cubit.dart';
 import 'package:sun_safety/repository/uv_repository.dart';
+import 'package:sun_safety/skin_type/cubit/skiin_type_cubit.dart';
 import 'package:sun_safety/uv/cubit/uv_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -34,16 +35,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Container(
                   padding: const EdgeInsets.only(left: 32.0),
                   height: constraints.maxHeight * 0.1,
-                  child: BlocBuilder<AddressCubit, AddressState>(
+                  child: BlocBuilder<UvCubit, UVState>(
                     buildWhen: (previous, current) {
                       return previous.address != current.address;
                     },
                     builder: (context, state) {
-                      if (state.addressEnum == AddressEnum.loading) {
-                        return const CircularProgressIndicator();
+                      if (state.uvStatus == UVStatus.loading) {
+                        return const SizedBox();
                       }
-                      if (state.addressEnum == AddressEnum.failure) {
-                        return const CircularProgressIndicator();
+                      if (state.uvStatus == UVStatus.failure) {
+                        return const SizedBox();
                       }
                       return Text(
                         state.address.country + ", " + state.address.locality,
@@ -61,7 +62,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: BlocBuilder<UvCubit, UVState>(
                   builder: (BuildContext context, UVState state) {
                     if (state.uvStatus == UVStatus.loading) {
-                      return const CircularProgressIndicator();
+                      return SpinKitFadingCircle(
+                        color: _textColor(context),
+                        size: constraints.maxHeight * 0.1,
+                      );
                     } else if (state.uvStatus == UVStatus.failure) {
                       return const Dialog(
                         child: Text("Failed to load data"),
@@ -249,12 +253,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                     ),
                                     Text(
-                                      state.timeToBurn.isInfinite
-                                          ? "0"
-                                          : state.timeToBurn.isNaN
-                                              ? "0"
-                                              : getTimeString(
-                                                  state.timeToBurn.round()),
+                                      getTimeString(
+                                        context
+                                            .watch<SkinTypeCubit>()
+                                            .getTimeToBurn(
+                                                currentUV: state.currentUV)
+                                            .round(),
+                                      ),
                                       // .toString() +
                                       //     " mins",
                                       style: TextStyle(

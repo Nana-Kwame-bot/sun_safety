@@ -1,11 +1,12 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:sun_safety/address/address.dart';
+import 'package:sun_safety/models/address.dart';
 
 class UserLocationRepository {
-  Future<Position?> getGeoLocationPosition() async {
+  Future<Position> getGeoLocationPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
+    Position _position;
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -34,14 +35,18 @@ class UserLocationRepository {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition(
+    _position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
+
+    return _position;
   }
 
   Future<Address> getAddressFromLatLong(Position position) async {
-    List<Placemark> placeMarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
+    List<Placemark> placeMarks = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
     // debugPrint(placeMarks.toString());
     Placemark place = placeMarks[0];
     return Address(

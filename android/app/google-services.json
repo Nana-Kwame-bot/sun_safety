@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "314318877713",
+    "project_id": "sun-safety-1b16f",
+    "storage_bucket": "sun-safety-1b16f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314318877713:android:969d477a2751b44e51adb0",
+        "android_client_info": {
+          "package_name": "com.sibylsystems.sun_safety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "314318877713-ld88a5qof2m7rpd1ots7pjtog9ti2e7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAk8Uem5xRuR5rCaC6nk71inCvYqMTo3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "314318877713-ld88a5qof2m7rpd1ots7pjtog9ti2e7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -40,14 +40,11 @@ dependencies:
   http: ^0.13.4
   hydrated_bloc: ^7.1.0
   intl: ^0.17.0
-  json_annotation: ^4.3.0
-  json_serializable: ^6.0.1
   path_provider: ^2.0.6
   scrollable_positioned_list: ^0.2.2
   syncfusion_flutter_charts: ^19.3.53
 
 dev_dependencies:
-  build_runner: ^2.1.5
   flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter

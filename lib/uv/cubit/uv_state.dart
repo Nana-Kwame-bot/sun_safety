@@ -15,7 +15,6 @@ class UVState extends Equatable {
     this.selectedIndex = 0,
     this.uvStatus = UVStatus.loading,
     this.timeToBurn = 0.0,
-    this.burnIndex = 0,
   });
 
   final UV uv;
@@ -29,7 +28,6 @@ class UVState extends Equatable {
   final int selectedIndex;
   final UVStatus uvStatus;
   final double timeToBurn;
-  final int burnIndex;
 
   @override
   List<Object> get props {
@@ -45,7 +43,6 @@ class UVState extends Equatable {
       selectedIndex,
       uvStatus,
       timeToBurn,
-      burnIndex,
     ];
   }
 
@@ -64,7 +61,6 @@ class UVState extends Equatable {
     int? selectedIndex,
     UVStatus? uvStatus,
     double? timeToBurn,
-    int? burnIndex,
   }) {
     return UVState(
       uv: uv ?? this.uv,
@@ -78,7 +74,6 @@ class UVState extends Equatable {
       selectedIndex: selectedIndex ?? this.selectedIndex,
       uvStatus: uvStatus ?? this.uvStatus,
       timeToBurn: timeToBurn ?? this.timeToBurn,
-      burnIndex: burnIndex ?? this.burnIndex,
     );
   }
 }

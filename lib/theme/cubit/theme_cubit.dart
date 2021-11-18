@@ -1,13 +1,12 @@
-import 'dart:developer';
-
 import 'package:equatable/equatable.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'theme_state.dart';
 
 class ThemeCubit extends HydratedCubit<ThemeState> {
   ThemeCubit() : super(const ThemeState(ThemeMode.system));
+  // ThemeMode? themeMode;
 
   void onAppStarted() {
     if (state.props.isEmpty) {
@@ -28,25 +27,19 @@ class ThemeCubit extends HydratedCubit<ThemeState> {
       case 2:
         emit(state.copyWith(themeMode: ThemeMode.dark));
         break;
-      default:
-        emit(state.copyWith(themeMode: ThemeMode.system));
+      // default:
+      //   emit(state.copyWith(themeMode: ThemeMode.system));
     }
   }
 
   @override
   ThemeState? fromJson(Map<String, dynamic> json) {
-    try {
-      return json['theme'];
-    } on Exception catch (e) {
-      log(e.toString());
-    }
+    final state = ThemeState.fromJson(json);
+    return ThemeState(state.themeMode);
   }
 
   @override
   Map<String, dynamic>? toJson(ThemeState state) {
-    final _themeString = state.toString();
-    return {
-      'theme': state,
-    };
+    return state.toJson();
   }
 }

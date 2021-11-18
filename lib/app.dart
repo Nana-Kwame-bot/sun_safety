@@ -10,6 +10,7 @@ import 'package:sun_safety/repository/elevation_repository.dart';
 import 'package:sun_safety/repository/goelocation.dart';
 import 'package:sun_safety/repository/uv_repository.dart';
 import 'package:http/http.dart' as http;
+import 'package:sun_safety/skin_type/cubit/skiin_type_cubit.dart';
 import 'package:sun_safety/theme/cubit/theme_cubit.dart';
 import 'package:sun_safety/uv/cubit/uv_cubit.dart';
 
@@ -23,11 +24,6 @@ class UVApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<CloudCoverageRepository>(
-          create: (context) {
-            return CloudCoverageRepository();
-          },
-        ),
         RepositoryProvider<UserLocationRepository>(
           create: (context) {
             return UserLocationRepository();
@@ -53,9 +49,12 @@ class UVApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) {
-              return CloudCoverageCubit(
-                RepositoryProvider.of<CloudCoverageRepository>(context),
-              )..getData();
+              return CloudCoverageCubit();
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              return SkiinTypeCubit();
             },
           ),
           BlocProvider(
@@ -80,6 +79,7 @@ class UVApp extends StatelessWidget {
                 RepositoryProvider.of<UserLocationRepository>(context),
                 BlocProvider.of<ElevationCubit>(context),
                 BlocProvider.of<CloudCoverageCubit>(context),
+                BlocProvider.of<SkiinTypeCubit>(context),
               )..fetchUV();
             },
           ),

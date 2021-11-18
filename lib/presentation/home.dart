@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sun_safety/presentation/home_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sun_safety/address/cubit/address_cubit.dart';
+import 'package:sun_safety/presentation/home_page.dart';
 import 'package:sun_safety/presentation/settings_page.dart';
 import 'package:sun_safety/presentation/stats_page.dart';
-import 'package:sun_safety/repository/uv_repository.dart';
-import 'package:sun_safety/uv/cubit/uv_cubit.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class Home extends StatefulWidget {
@@ -57,29 +56,25 @@ class _MyStatefulWidgetState extends State<Home> {
             ),
           ),
           actions: [
-            NeumorphicButton(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              onPressed: () {
-                NeumorphicTheme.of(context)!.themeMode =
-                    NeumorphicTheme.isUsingDark(context)
-                        ? ThemeMode.light
-                        : ThemeMode.dark;
-              },
-              style: const NeumorphicStyle(
-                depth: -10.0,
-                shape: NeumorphicShape.concave,
-                boxShape: NeumorphicBoxShape.circle(),
-              ),
-              child: Center(
-                child: Icon(
-                  NeumorphicTheme.isUsingDark(context)
-                      ? Icons.light_mode
-                      : Icons.dark_mode,
-                  color: _textColor(context: context),
-                  size: 30.0,
-                ),
-              ),
-            ),
+            // NeumorphicButton(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            //   onPressed: () {
+            //     BlocProvider.of<AddressCubit>(context, listen: false)
+            //         .getAddress();
+            //   },
+            //   style: const NeumorphicStyle(
+            //     depth: -10.0,
+            //     shape: NeumorphicShape.concave,
+            //     boxShape: NeumorphicBoxShape.circle(),
+            //   ),
+            //   child: Center(
+            //     child: Icon(
+            //       Icons.my_location,
+            //       color: _textColor(context: context),
+            //       size: 30.0,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         backgroundColor: NeumorphicTheme.baseColor(context),

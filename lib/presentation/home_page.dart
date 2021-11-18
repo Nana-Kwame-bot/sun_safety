@@ -39,6 +39,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       return previous.address != current.address;
                     },
                     builder: (context, state) {
+                      if (state.addressEnum == AddressEnum.loading) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (state.addressEnum == AddressEnum.failure) {
+                        return const CircularProgressIndicator();
+                      }
                       return Text(
                         state.address.country + ", " + state.address.locality,
                         style: const TextStyle(
@@ -85,18 +91,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                   BlocBuilder<CloudCoverageCubit,
                                       CloudCoverageState>(
                                     buildWhen: (previous, current) {
-                                      return previous
-                                              .cloudCoverage.dropdownValue !=
-                                          current.cloudCoverage.dropdownValue;
+                                      return previous.dropdownValue !=
+                                          current.dropdownValue;
                                     },
                                     builder: (context, state) {
-                                      if (state.cloudState ==
-                                          CloudState.loading) {
-                                        return const CircularProgressIndicator();
-                                      }
                                       return DropdownButton<String>(
-                                        value:
-                                            state.cloudCoverage.dropdownValue,
+                                        enableFeedback: true,
+                                        value: state.dropdownValue,
                                         dropdownColor:
                                             NeumorphicTheme.baseColor(context),
                                         icon: const Icon(Icons.arrow_downward),
@@ -116,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             dropDownValue: newValue!,
                                           );
                                         },
-                                        items: state.cloudCoverage.items
+                                        items: state.items
                                             .map<DropdownMenuItem<String>>(
                                                 (String value) {
                                           return DropdownMenuItem<String>(
@@ -248,7 +249,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                     ),
                                     Text(
-                                      getTimeString(state.timeToBurn.round()),
+                                      state.timeToBurn.isInfinite
+                                          ? "0"
+                                          : state.timeToBurn.isNaN
+                                              ? "0"
+                                              : getTimeString(
+                                                  state.timeToBurn.round()),
                                       // .toString() +
                                       //     " mins",
                                       style: TextStyle(

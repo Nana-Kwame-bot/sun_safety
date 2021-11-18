@@ -1,26 +1,32 @@
 part of 'cloud_coverage_cubit.dart';
 
-enum CloudState { loading, loaded }
-
 class CloudCoverageState extends Equatable {
-  const CloudCoverageState(this.cloudCoverage, this.cloudState);
+  const CloudCoverageState({
+    this.dropdownValue = 'Clear Skies',
+    this.items = const [
+      'Clear Skies',
+      'Scattered clouds',
+      'Broken clouds',
+      'Overcast skies',
+    ],
+  });
 
-  final CloudCoverage cloudCoverage;
-  final CloudState cloudState;
+  final String dropdownValue;
+  final List<String> items;
 
   @override
-  List<Object> get props => [cloudCoverage, cloudState];
+  List<Object> get props => [dropdownValue, items];
 
   @override
   bool get stringify => true;
 
   CloudCoverageState copyWith({
-    CloudCoverage? cloudCoverage,
-    CloudState? cloudState,
+    String? dropdownValue,
+    List<String>? items,
   }) {
     return CloudCoverageState(
-      cloudCoverage ?? this.cloudCoverage,
-      cloudState ?? this.cloudState,
+      dropdownValue: dropdownValue ?? this.dropdownValue,
+      items: items ?? this.items,
     );
   }
 }

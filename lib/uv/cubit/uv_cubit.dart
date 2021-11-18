@@ -11,6 +11,7 @@ import 'package:sun_safety/cloud_coverage/cubit/cloud_coverage_cubit.dart';
 import 'package:sun_safety/elevation/cubit/elevation_cubit.dart';
 import 'package:sun_safety/elevation/elevation.dart';
 import 'package:sun_safety/models/result.dart';
+import 'package:sun_safety/skin_type/cubit/skiin_type_cubit.dart';
 import 'package:sun_safety/uv/uv.dart';
 import 'package:sun_safety/models/uv_series.dart';
 import 'package:sun_safety/repository/goelocation.dart';
@@ -23,12 +24,15 @@ class UvCubit extends HydratedCubit<UVState> {
   late final StreamSubscription _elevationSubscription;
   final CloudCoverageCubit _coverageCubit;
   late final StreamSubscription _coverageSubscription;
+  final SkiinTypeCubit _skiinTypeCubit;
+  late final StreamSubscription _skinSubscription;
 
   UvCubit(
     this._uvRepository,
     this._locationRepository,
     this._elevationCubit,
     this._coverageCubit,
+    this._skiinTypeCubit,
   ) : super(
           UVState(
             uv: UV(),
@@ -40,12 +44,17 @@ class UvCubit extends HydratedCubit<UVState> {
     });
     _coverageSubscription =
         _coverageCubit.stream.listen((CloudCoverageState cloudCoverageState) {
-      _dropDown = cloudCoverageState.cloudCoverage.dropdownValue;
+      _dropDown = cloudCoverageState.dropdownValue;
+    });
+    _skinSubscription =
+        _skiinTypeCubit.stream.listen((SkiinTypeState skiinTypeState) {
+      _burnIndex = skiinTypeState.burnIndex;
     });
   }
 
   final UVRepository _uvRepository;
   Elevation? _elevation;
+  int? _burnIndex;
   String? _dropDown;
   final UserLocationRepository _locationRepository;
 
@@ -296,8 +305,90 @@ class UvCubit extends HydratedCubit<UVState> {
     return augmentRadiation(currentUV: _uvValue);
   }
 
-  void setBurnIndex({required int burnIndex}) {
-    emit(state.copyWith(burnIndex: burnIndex));
+  String getVitaminD() {
+    final double indexLevel = state.currentUV;
+    switch (_burnIndex) {
+      case 0:
+        if (0 <= indexLevel && indexLevel <= 3) {
+          return "15-20m";
+        } else if (3 <= indexLevel && indexLevel <= 6) {
+          return "10-15m";
+        } else if (6 <= indexLevel && indexLevel <= 8) {
+          return "5-10m";
+        } else if (8 <= indexLevel && indexLevel <= 11) {
+          return "2-8m";
+        } else if (indexLevel > 11) {
+          return "1-5m";
+        }
+        return "15-20m";
+      case 1:
+        if (0 <= indexLevel && indexLevel <= 3) {
+          return "20-30m";
+        } else if (3 <= indexLevel && indexLevel <= 6) {
+          return "15-20m";
+        } else if (6 <= indexLevel && indexLevel <= 8) {
+          return "10-15m";
+        } else if (8 <= indexLevel && indexLevel <= 11) {
+          return "5-10m";
+        } else if (indexLevel > 11) {
+          return "2-8m";
+        }
+        return "20-30m";
+      case 2:
+        if (0 <= indexLevel && indexLevel <= 3) {
+          return "30-40m";
+        } else if (3 <= indexLevel && indexLevel <= 6) {
+          return "20-30m";
+        } else if (6 <= indexLevel && indexLevel <= 8) {
+          return "15-20m";
+        } else if (8 <= indexLevel && indexLevel <= 11) {
+          return "10-15m";
+        } else if (indexLevel > 11) {
+          return "5-10m";
+        }
+        return "30-40m";
+      case 3:
+        if (0 <= indexLevel && indexLevel <= 3) {
+          return "40-60m";
+        } else if (3 <= indexLevel && indexLevel <= 6) {
+          return "30-40m";
+        } else if (6 <= indexLevel && indexLevel <= 8) {
+          return "20-30m";
+        } else if (8 <= indexLevel && indexLevel <= 11) {
+          return "15-20m";
+        } else if (indexLevel > 11) {
+          return "10-15m";
+        }
+        return "40-60m";
+      case 4:
+        if (0 <= indexLevel && indexLevel <= 3) {
+          return "60-80m";
+        } else if (3 <= indexLevel && indexLevel <= 6) {
+          return "40-60m";
+        } else if (6 <= indexLevel && indexLevel <= 8) {
+          return "30-40m";
+        } else if (8 <= indexLevel && indexLevel <= 11) {
+          return "20-30m";
+        } else if (indexLevel > 11) {
+          return "15-20m";
+        }
+        return "60-80m";
+      case 5:
+        if (0 <= indexLevel && indexLevel <= 3) {
+          return "";
+        } else if (3 <= indexLevel && indexLevel <= 6) {
+          return "60-80m";
+        } else if (6 <= indexLevel && indexLevel <= 8) {
+          return "40-60m";
+        } else if (8 <= indexLevel && indexLevel <= 11) {
+          return "30-40m";
+        } else if (indexLevel > 11) {
+          return "20-30m";
+        }
+        return "";
+      default:
+        return "";
+    }
   }
 
   double setTimeToBurn(
@@ -308,8 +399,14 @@ class UvCubit extends HydratedCubit<UVState> {
     if (currentUV <= 0) {
       currentUV = _getUV(results: results);
     }
+    if (currentUV <= 0) {
+      currentUV = 0.0;
+    }
+    if (currentUV.isInfinite || currentUV.isNaN) {
+      currentUV = 0.0;
+    }
     currentUV = augmentRadiation(currentUV: currentUV);
-    switch (state.burnIndex) {
+    switch (_burnIndex) {
       case 0:
         return (200 * 2.5) / (3 * currentUV);
 
@@ -338,7 +435,6 @@ class UvCubit extends HydratedCubit<UVState> {
     try {
       final _uv = UV.fromJson(json);
       return UVState(
-        uvStatus: UVStatus.success,
         uv: _uv,
       );
     } on Exception catch (e) {
@@ -349,11 +445,16 @@ class UvCubit extends HydratedCubit<UVState> {
 
   @override
   Map<String, dynamic>? toJson(UVState state) {
-    return state.uv.toJson();
+    try {
+      return state.uv.toJson();
+    } on Exception catch (e) {
+      log.log(e.toString());
+    }
   }
 
   @override
   Future<void> close() {
+    _skinSubscription.cancel();
     _coverageSubscription.cancel();
     _elevationSubscription.cancel();
     return super.close();

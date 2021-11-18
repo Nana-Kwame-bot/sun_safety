@@ -70,7 +70,7 @@ class UvCubit extends HydratedCubit<UVState> {
 
       final UV _uv;
 
-      if (state.uv.result.isEmpty) {
+      if (now.day != state.uv.result.first.uvTime.day) {
         _uv = await _uvRepository.fetchData(
           latitude: _position!.latitude,
           longitude: _position.longitude,
@@ -78,7 +78,7 @@ class UvCubit extends HydratedCubit<UVState> {
               _elevation == null ? null : _elevation!.results.first.elevation,
         );
         emit(state.copyWith(uvStatus: UVStatus.success));
-      } else if (now.day != state.uv.result.first.uvTime.day) {
+      } else if (state.uv.result.isEmpty) {
         _uv = await _uvRepository.fetchData(
           latitude: _position!.latitude,
           longitude: _position.longitude,

@@ -5,7 +5,6 @@ import 'package:sun_safety/address/cubit/address_cubit.dart';
 import 'package:sun_safety/cloud_coverage/cubit/cloud_coverage_cubit.dart';
 import 'package:sun_safety/elevation/cubit/elevation_cubit.dart';
 import 'package:sun_safety/presentation/home.dart';
-import 'package:sun_safety/repository/cloud_coverage_repository.dart';
 import 'package:sun_safety/repository/elevation_repository.dart';
 import 'package:sun_safety/repository/goelocation.dart';
 import 'package:sun_safety/repository/uv_repository.dart';

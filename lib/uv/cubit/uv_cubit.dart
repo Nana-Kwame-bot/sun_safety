@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:sun_safety/cloud_coverage/cloud_coverage.dart';
 import 'package:sun_safety/cloud_coverage/cubit/cloud_coverage_cubit.dart';
 import 'package:sun_safety/elevation/cubit/elevation_cubit.dart';
 import 'package:sun_safety/elevation/elevation.dart';

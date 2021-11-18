@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sun_safety/address/cubit/address_cubit.dart';
 import 'package:sun_safety/presentation/home_page.dart';
 import 'package:sun_safety/presentation/settings_page.dart';
 import 'package:sun_safety/presentation/stats_page.dart';
@@ -55,7 +53,7 @@ class _MyStatefulWidgetState extends State<Home> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          actions: [
+          actions: const [
             // NeumorphicButton(
             //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
             //   onPressed: () {
